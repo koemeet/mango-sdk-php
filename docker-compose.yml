@@ -1,0 +1,8 @@
+php:
+    image: steffenbrem/nginx-php7
+    volumes:
+        - ./etc/docker/php/debug.ini:/usr/local/etc/php/conf.d/debug.ini
+        - .:/var/www/html
+    environment:
+        - PHP_IDE_CONFIG=serverName=_
+        - XDEBUG_CONFIG=idekey=PHPSTORM

@@ -1,0 +1,20 @@
+{
+    "name": "steffenbrem/mango-sdk-php",
+    "authors": [
+        {
+            "name": "Steffen Brem",
+            "email": "steffenbrem@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "~6.0",
+        "ocramius/proxy-manager": "^2.0.3",
+        "art4/json-api-client": "^0.6.3",
+        "symfony/property-access": "^3.1"
+    }
+}
