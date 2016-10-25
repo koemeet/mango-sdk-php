@@ -14,8 +14,7 @@
     "require": {
         "guzzlehttp/guzzle": "~6.0",
         "ocramius/proxy-manager": "^2.0.3",
-        "art4/json-api-client": "^0.6.3",
-        "symfony/property-access": "^3.1"
+        "symfony/property-access": "^2.8"
     },
     "extra": {
         "branch-alias": {

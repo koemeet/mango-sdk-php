@@ -4,58 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6f1c7699d4c1e6d79ef5a7fd17a8b572",
-    "content-hash": "b75d20f48588bf9b5a3151cc4cc62549",
+    "hash": "7a7d059501f5b86d47426a04bc672e47",
+    "content-hash": "5e4eadae8f8e2266792de906003b4ad1",
     "packages": [
-        {
-            "name": "art4/json-api-client",
-            "version": "0.6.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Art4/json-api-client.git",
-                "reference": "4579f73df016d0c17e67fd53330e6f7d2539df3d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Art4/json-api-client/zipball/4579f73df016d0c17e67fd53330e6f7d2539df3d",
-                "reference": "4579f73df016d0c17e67fd53330e6f7d2539df3d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Art4\\JsonApiClient\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL2"
-            ],
-            "authors": [
-                {
-                    "name": "Artur Weigandt",
-                    "email": "art4@wlabs.de",
-                    "homepage": "http://wlabs.de"
-                }
-            ],
-            "description": "JSON API client",
-            "homepage": "https://github.com/Art4/json-api-client",
-            "keywords": [
-                "JSON-API",
-                "api",
-                "client",
-                "json",
-                "reader",
-                "validator"
-            ],
-            "time": "2016-04-26 17:28:19"
-        },
         {
             "name": "guzzlehttp/guzzle",
             "version": "6.2.2",
@@ -339,54 +290,6 @@
             "time": "2016-07-01 12:11:54"
         },
         {
-            "name": "paragonie/random_compat",
-            "version": "v2.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "088c04e2f261c33bed6ca5245491cfca69195ccf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/088c04e2f261c33bed6ca5245491cfca69195ccf",
-                "reference": "088c04e2f261c33bed6ca5245491cfca69195ccf",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*|5.*"
-            },
-            "suggest": {
-                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "lib/random.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Paragon Initiative Enterprises",
-                    "email": "security@paragonie.com",
-                    "homepage": "https://paragonie.com"
-                }
-            ],
-            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
-            "keywords": [
-                "csprng",
-                "pseudorandom",
-                "random"
-            ],
-            "time": "2016-04-03 06:00:07"
-        },
-        {
             "name": "psr/http-message",
             "version": "1.0.1",
             "source": {
@@ -437,144 +340,26 @@
             "time": "2016-08-06 14:39:51"
         },
         {
-            "name": "symfony/inflector",
-            "version": "v3.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/inflector.git",
-                "reference": "1ea83acdd81053bdf35ccf3ee91f01b243664b61"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/inflector/zipball/1ea83acdd81053bdf35ccf3ee91f01b243664b61",
-                "reference": "1ea83acdd81053bdf35ccf3ee91f01b243664b61",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.9"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Inflector\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bernhard Schussek",
-                    "email": "bschussek@gmail.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Inflector Component",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "inflection",
-                "pluralize",
-                "singularize",
-                "string",
-                "symfony",
-                "words"
-            ],
-            "time": "2016-06-08 11:24:07"
-        },
-        {
-            "name": "symfony/polyfill-php70",
-            "version": "v1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-php70.git",
-                "reference": "a42f4b6b05ed458910f8af4c4e1121b0101b2d85"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/a42f4b6b05ed458910f8af4c4e1121b0101b2d85",
-                "reference": "a42f4b6b05ed458910f8af4c4e1121b0101b2d85",
-                "shasum": ""
-            },
-            "require": {
-                "paragonie/random_compat": "~1.0|~2.0",
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php70\\": ""
-                },
-                "files": [
-                    "bootstrap.php"
-                ],
-                "classmap": [
-                    "Resources/stubs"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 7.0+ features to lower PHP versions",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "compatibility",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "time": "2016-05-18 14:26:46"
-        },
-        {
             "name": "symfony/property-access",
-            "version": "v3.1.5",
+            "version": "v2.8.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "6d7212a9bcaacb2c46ed401d0bbaf56c975ab640"
+                "reference": "2dafa20e25cb964268ce3ed83fc9af9b9d2ae14d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/6d7212a9bcaacb2c46ed401d0bbaf56c975ab640",
-                "reference": "6d7212a9bcaacb2c46ed401d0bbaf56c975ab640",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/2dafa20e25cb964268ce3ed83fc9af9b9d2ae14d",
+                "reference": "2dafa20e25cb964268ce3ed83fc9af9b9d2ae14d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9",
-                "symfony/inflector": "~3.1",
-                "symfony/polyfill-php70": "~1.0"
+                "php": ">=5.3.9"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "2.8-dev"
                 }
             },
             "autoload": {
@@ -612,24 +397,24 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2016-08-15 13:15:28"
+            "time": "2016-07-30 07:20:35"
         },
         {
             "name": "zendframework/zend-code",
-            "version": "3.0.4",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-code.git",
-                "reference": "c5272131d3acb0f470a2462ed088fca3b6ba61c2"
+                "reference": "2899c17f83a7207f2d7f53ec2f421204d3beea27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/c5272131d3acb0f470a2462ed088fca3b6ba61c2",
-                "reference": "c5272131d3acb0f470a2462ed088fca3b6ba61c2",
+                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/2899c17f83a7207f2d7f53ec2f421204d3beea27",
+                "reference": "2899c17f83a7207f2d7f53ec2f421204d3beea27",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.5 || 7.0.0 - 7.0.4 || ^7.0.6",
+                "php": "^5.6 || 7.0.0 - 7.0.4 || ^7.0.6",
                 "zendframework/zend-eventmanager": "^2.6 || ^3.0"
             },
             "require-dev": {
@@ -646,8 +431,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev",
-                    "dev-develop": "3.1-dev"
+                    "dev-master": "3.1-dev",
+                    "dev-develop": "3.2-dev"
                 }
             },
             "autoload": {
@@ -665,7 +450,7 @@
                 "code",
                 "zf2"
             ],
-            "time": "2016-06-30 22:35:27"
+            "time": "2016-10-24 13:23:32"
         },
         {
             "name": "zendframework/zend-eventmanager",
