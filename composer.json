@@ -16,5 +16,10 @@
         "ocramius/proxy-manager": "^2.0.3",
         "art4/json-api-client": "^0.6.3",
         "symfony/property-access": "^3.1"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
     }
 }

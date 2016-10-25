@@ -40,9 +40,11 @@ class ObjectHydrator implements HydratorInterface
      */
     public function hydrateAll(array $data)
     {
+        $this->processIncluded($data);
+
         $objects = [];
 
-        foreach ($data as $item) {
+        foreach ($data['data'] as $item) {
             $objects[] = $this->getObject($item['type'], $item);
         }
 
@@ -54,7 +56,23 @@ class ObjectHydrator implements HydratorInterface
      */
     public function hydrateSingle(array $data)
     {
-        return $this->getObject($data['type'], $data);
+        $this->processIncluded($data);
+
+        return $this->getObject($data['data']['type'], $data['data']);
+    }
+
+    /**
+     * @param array $data
+     */
+    private function processIncluded(array $data)
+    {
+        if (isset($data['included'])) {
+            $included = $data['included'];
+
+            foreach ($included as $include) {
+                $this->getObject($include['type'], $include);
+            }
+        }
     }
 
     /**
@@ -65,6 +83,12 @@ class ObjectHydrator implements HydratorInterface
      */
     private function getObject($type, array $data)
     {
-        return $this->unitOfWork->createObject($this->resourceRegistry->get($type), $data);
+        $className = $this->resourceRegistry->get($type);
+
+        if (!$className) {
+            return false;
+        }
+
+        return $this->unitOfWork->createObject($className, $data);
     }
 }

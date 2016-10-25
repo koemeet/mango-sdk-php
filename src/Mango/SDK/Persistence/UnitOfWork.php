@@ -109,7 +109,7 @@ class UnitOfWork
      */
     public function getFromIdentityMap($className, $identifier)
     {
-        return $this->identityMap[$className][$identifier];
+        return isset($this->identityMap[$className][$identifier]) ? $this->identityMap[$className][$identifier] : null;
     }
 
     /**
@@ -122,16 +122,12 @@ class UnitOfWork
     {
         $identifier = $data['id'];
 
-        if (isset($this->identityMap[$className][$identifier])) {
-            $object = $this->getFromIdentityMap($className, $identifier);
-        } else {
+        if (!$object = $this->getFromIdentityMap($className, $identifier)) {
             $object = new $className;
 
-            // set id of object
-            $refl = new \ReflectionClass(get_class($object));
-            $prop = $refl->getProperty('id');
-            $prop->setAccessible(true);
-            $prop->setValue($object, $data['id']);
+            $idProperty = new \ReflectionProperty($className, 'id');
+            $idProperty->setAccessible(true);
+            $idProperty->setValue($object, $data['id']);
 
             $this->addToIdentityMap($object);
         }
@@ -145,20 +141,26 @@ class UnitOfWork
         }
 
         foreach ($data['relationships'] as $field => $relationship) {
-            $relationship = $relationship['data'];
-
             if (!isset($relationship['type'])) {
                 continue;
             }
 
+            $relationship = $relationship['data'];
+
             if ($propertyAccessor->isWritable($object, $field)) {
                 $proxyClass = $this->resourceRegistry->get($relationship['type']);
-                if ($proxyClass) {
-                    $proxy = $this->proxyFactory->getProxy($proxyClass, $relationship['id']);
-                    $propertyAccessor->setValue($object, $field, $proxy);
 
-                    $this->addToIdentityMap($proxy);
+                if (!$proxyClass) {
+                    continue;
                 }
+
+                if (!$proxy = $this->getFromIdentityMap($proxyClass, $relationship['id'])) {
+                    $proxy = $this->proxyFactory->getProxy($proxyClass, $relationship['id']);
+                    $this->addToIdentityMap($proxy);
+
+                }
+
+                $propertyAccessor->setValue($object, $field, $proxy);
             }
         }
 

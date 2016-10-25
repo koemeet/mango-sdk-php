@@ -70,4 +70,9 @@ class Shipment
     {
         $this->method = $method;
     }
+
+    public function isBackorder()
+    {
+        return $this->state === 'backorder';
+    }
 }

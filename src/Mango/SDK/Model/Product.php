@@ -14,16 +14,22 @@ namespace Mango\SDK\Model;
 /**
  * @author Steffen Brem <steffenbrem@gmail.com>
  */
-class ShipmentMethod
+class Product
 {
     /**
      * @var mixed
      */
     protected $id;
 
-    protected $code;
+    /**
+     * @var string
+     */
+    protected $name;
 
-    protected $calculator;
+    /**
+     * @var Channel[]
+     */
+    protected $channels;
 
     /**
      * @return mixed
@@ -36,32 +42,32 @@ class ShipmentMethod
     /**
      * @return mixed
      */
-    public function getCode()
+    public function getName()
     {
-        return $this->code;
+        return $this->name;
     }
 
     /**
-     * @param mixed $code
+     * @param mixed $name
      */
-    public function setCode($code)
+    public function setName($name)
     {
-        $this->code = $code;
+        $this->name = $name;
     }
 
     /**
-     * @return mixed
+     * @return Channel[]
      */
-    public function getCalculator()
+    public function getChannels()
     {
-        return $this->calculator;
+        return $this->channels;
     }
 
     /**
-     * @param mixed $calculator
+     * @param Channel[] $channels
      */
-    public function setCalculator($calculator)
+    public function setChannels($channels)
     {
-        $this->calculator = $calculator;
+        $this->channels = $channels;
     }
 }
