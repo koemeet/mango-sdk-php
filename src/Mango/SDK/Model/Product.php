@@ -24,7 +24,17 @@ class Product
     /**
      * @var string
      */
+    protected $currentLocale;
+
+    /**
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @var string
+     */
+    protected $description;
 
     /**
      * @var Channel[]
@@ -32,11 +42,32 @@ class Product
     protected $channels;
 
     /**
+     * @var ProductVariant
+     */
+    protected $masterVariant;
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentLocale()
+    {
+        return $this->currentLocale;
+    }
+
+    /**
+     * @param string $currentLocale
+     */
+    public function setCurrentLocale($currentLocale)
+    {
+        $this->currentLocale = $currentLocale;
     }
 
     /**
@@ -56,6 +87,22 @@ class Product
     }
 
     /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
      * @return Channel[]
      */
     public function getChannels()
@@ -69,5 +116,29 @@ class Product
     public function setChannels($channels)
     {
         $this->channels = $channels;
+    }
+
+    /**
+     * @return ProductVariant
+     */
+    public function getMasterVariant()
+    {
+        return $this->masterVariant;
+    }
+
+    /**
+     * @param ProductVariant $masterVariant
+     */
+    public function setMasterVariant($masterVariant)
+    {
+        $this->masterVariant = $masterVariant;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPrice()
+    {
+        return $this->masterVariant->getPrice();
     }
 }

@@ -11,6 +11,7 @@
 
 namespace Mango\SDK\Persistence;
 
+use Doctrine\Common\Inflector\Inflector;
 use Mango\SDK\Proxy\ProxyFactory;
 use Mango\SDK\Registry\ResourceRegistry;
 use Mango\SDK\Utils\ClassUtils;
@@ -135,13 +136,17 @@ class UnitOfWork
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($data['attributes'] as $field => $value) {
+            $field = Inflector::camelize($field);
+
             if ($propertyAccessor->isWritable($object, $field)) {
                 $propertyAccessor->setValue($object, $field, $value);
             }
         }
 
         foreach ($data['relationships'] as $field => $relationship) {
-            if (!isset($relationship['type'])) {
+            $field = Inflector::camelize($field);
+
+            if (!isset($relationship['data'])) {
                 continue;
             }
 

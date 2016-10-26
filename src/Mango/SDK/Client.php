@@ -17,6 +17,7 @@ use Mango\SDK\Hydration\ObjectHydrator;
 use Mango\SDK\Persistence\UnitOfWork;
 use Mango\SDK\Proxy\ProxyFactory;
 use Mango\SDK\Registry\ResourceRegistry;
+use Mango\SDK\Storage\TokenStorageInterface;
 
 /**
  * @author Steffen Brem <steffenbrem@gmail.com>
@@ -49,6 +50,11 @@ class Client
     protected $clientSecret;
 
     /**
+     * @var TokenStorageInterface
+     */
+    protected $tokenStorage;
+
+    /**
      * @var string
      */
     protected $refreshToken;
@@ -65,12 +71,16 @@ class Client
 
     /**
      * @param ResourceRegistry $registry
-     * @param string $clientId
-     * @param string $clientSecret
-     * @param string $refreshToken
+     * @param TokenStorageInterface $tokenStorage
+     * @param $clientId
+     * @param $clientSecret
      */
-    public function __construct(ResourceRegistry $registry, $clientId, $clientSecret, $refreshToken)
-    {
+    public function __construct(
+        ResourceRegistry $registry,
+        TokenStorageInterface $tokenStorage,
+        $clientId,
+        $clientSecret
+    ) {
         $this->unitOfWork = new UnitOfWork($registry, new ProxyFactory($this, $registry));
         $this->hydrator = new ObjectHydrator($this->unitOfWork, $registry);
 
@@ -78,9 +88,31 @@ class Client
             'base_uri' => 'http://mango.docker/',
         ]);
 
+        $this->tokenStorage = $tokenStorage;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->refreshToken = $refreshToken;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return array
+     */
+    public function exchangeCodeForAccessToken($code)
+    {
+        $response = $this->http->request('POST', '/oauth/v2/token', [
+            'form_params' => [
+                'grant_type' => 'authorization_code',
+                'code' => $code,
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'redirect_uri' => 'http://sendcloud.docker/oauth/callback',
+            ],
+        ]);
+
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        return $data;
     }
 
     /**
@@ -125,14 +157,6 @@ class Client
     }
 
     /**
-     * @return string
-     */
-    public function getAccessToken()
-    {
-        return $this->accessToken;
-    }
-
-    /**
      * @param string $method
      * @param string $path
      * @param array $options
@@ -160,7 +184,7 @@ class Client
             $response = $this->http->request($method, '/api/'.trim($path, '/'), [
                 'query' => $query,
                 'headers' => [
-                    'Authorization' => 'Bearer '.$this->accessToken,
+                    'Authorization' => 'Bearer '.$this->tokenStorage->getAccessToken(),
                 ],
             ]);
         } catch (ClientException $e) {
@@ -169,6 +193,8 @@ class Client
 
                 return $this->doRequest($method, $path, $options);
             }
+
+            throw $e;
         }
 
         $this->requestCount++;
@@ -186,13 +212,12 @@ class Client
                 'grant_type' => 'refresh_token',
                 'client_id' => $this->clientId,
                 'client_secret' => $this->clientSecret,
-                'refresh_token' => $this->refreshToken,
+                'refresh_token' => $this->tokenStorage->getRefreshToken(),
             ],
         ]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
-        $this->accessToken = $data['access_token'];
-        $this->refreshToken = $data['refresh_token'];
+        $this->tokenStorage->store($data['access_token'], $data['refresh_token']);
     }
 }
