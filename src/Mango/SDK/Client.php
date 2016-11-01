@@ -11,6 +11,7 @@
 
 namespace Mango\SDK;
 
+use Doctrine\Common\Inflector\Inflector;
 use GuzzleHttp\Exception\ClientException;
 use Mango\SDK\Hydration\HydratorInterface;
 use Mango\SDK\Hydration\ObjectHydrator;
@@ -85,7 +86,7 @@ class Client
         $this->hydrator = new ObjectHydrator($this->unitOfWork, $registry);
 
         $this->http = new \GuzzleHttp\Client([
-            'base_uri' => 'http://mango.docker/',
+            'base_uri' => 'http://mango.docker/'
         ]);
 
         $this->tokenStorage = $tokenStorage;
@@ -95,18 +96,19 @@ class Client
 
     /**
      * @param string $code
+     * @param string $redirectUri
      *
      * @return array
      */
-    public function exchangeCodeForAccessToken($code)
+    public function exchangeCodeForAccessToken($code, $redirectUri)
     {
         $response = $this->http->request('POST', '/oauth/v2/token', [
-            'form_params' => [
+            'json' => [
                 'grant_type' => 'authorization_code',
                 'code' => $code,
                 'client_id' => $this->clientId,
                 'client_secret' => $this->clientSecret,
-                'redirect_uri' => 'http://sendcloud.docker/oauth/callback',
+                'redirect_uri' => $redirectUri,
             ],
         ]);
 
@@ -121,9 +123,9 @@ class Client
      *
      * @return array|mixed
      */
-    public function query($resource, array $query)
+    public function query($resource, array $query = [])
     {
-        $data = $this->doRequest('GET', $resource);
+        $data = $this->doRequest('GET', Inflector::pluralize($resource), $query);
 
         // hydrate all objects
         $objects = $this->hydrator->hydrateAll($data);
@@ -140,12 +142,25 @@ class Client
      */
     public function find($resource, $id, array $options = null)
     {
-        $data = $this->doRequest('GET', $resource.'/'.$id, $options);
+        $data = $this->doRequest('GET', Inflector::pluralize($resource).'/'.$id, $options);
 
         // hydrate all objects
         $objects = $this->hydrator->hydrateSingle($data);
 
         return $objects;
+    }
+
+    /**
+     * @param $resource
+     * @param array $data
+     *
+     * @return mixed|object
+     */
+    public function create($resource, array $data)
+    {
+        $data = $this->doRequest('POST', Inflector::pluralize($resource), null, $data);
+
+        return $this->hydrator->hydrateSingle($data);
     }
 
     /**
@@ -160,10 +175,11 @@ class Client
      * @param string $method
      * @param string $path
      * @param array $options
+     * @param array $data
      *
      * @return mixed
      */
-    protected function doRequest($method, $path, array $options = null)
+    protected function doRequest($method, $path, array $options = null, array $data = null)
     {
         $query = [];
 
@@ -181,12 +197,18 @@ class Client
         }
 
         try {
-            $response = $this->http->request($method, '/api/'.trim($path, '/'), [
+            $options = [
                 'query' => $query,
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->tokenStorage->getAccessToken(),
                 ],
-            ]);
+            ];
+
+            if (null !== $data) {
+                $options['json'] = $data;
+            }
+
+            $response = $this->http->request($method, '/api/'.trim($path, '/'), $options);
         } catch (ClientException $e) {
             if (401 === $e->getCode()) {
                 $this->requestNewAccessToken();
@@ -208,7 +230,7 @@ class Client
     protected function requestNewAccessToken()
     {
         $response = $this->http->request('POST', '/oauth/v2/token', [
-            'form_params' => [
+            'json' => [
                 'grant_type' => 'refresh_token',
                 'client_id' => $this->clientId,
                 'client_secret' => $this->clientSecret,
