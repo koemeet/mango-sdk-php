@@ -152,6 +152,11 @@ class UnitOfWork
 
             $relationship = $relationship['data'];
 
+            // skip has-many relationships for now. TODO
+            if (!isset($relationship['type'])) {
+                continue;
+            }
+
             if ($propertyAccessor->isWritable($object, $field)) {
                 $proxyClass = $this->resourceRegistry->get($relationship['type']);
 

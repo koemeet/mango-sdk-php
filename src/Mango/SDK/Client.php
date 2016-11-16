@@ -19,6 +19,7 @@ use Mango\SDK\Persistence\UnitOfWork;
 use Mango\SDK\Proxy\ProxyFactory;
 use Mango\SDK\Registry\ResourceRegistry;
 use Mango\SDK\Storage\TokenStorageInterface;
+use Mango\SDK\Utils\ClassUtils;
 
 /**
  * @author Steffen Brem <steffenbrem@gmail.com>
@@ -34,6 +35,11 @@ class Client
      * @var HydratorInterface
      */
     protected $hydrator;
+
+    /**
+     * @var ResourceRegistry
+     */
+    protected $registry;
 
     /**
      * @var \GuzzleHttp\Client
@@ -82,11 +88,12 @@ class Client
         $clientId,
         $clientSecret
     ) {
-        $this->unitOfWork = new UnitOfWork($registry, new ProxyFactory($this, $registry));
-        $this->hydrator = new ObjectHydrator($this->unitOfWork, $registry);
+        $this->registry = $registry;
+        $this->unitOfWork = new UnitOfWork($registry, new ProxyFactory($this, $this->registry));
+        $this->hydrator = new ObjectHydrator($this->unitOfWork, $this->registry);
 
         $this->http = new \GuzzleHttp\Client([
-            'base_uri' => 'http://mango.docker/'
+            'base_uri' => 'http://mango.docker/',
         ]);
 
         $this->tokenStorage = $tokenStorage;
@@ -115,6 +122,16 @@ class Client
         $data = json_decode($response->getBody()->getContents(), true);
 
         return $data;
+    }
+
+    /**
+     * @param array $payload
+     *
+     * @return object
+     */
+    public function pushPayload(array $payload)
+    {
+        return $this->hydrator->hydrateSingle($payload);
     }
 
     /**
@@ -161,6 +178,52 @@ class Client
         $data = $this->doRequest('POST', Inflector::pluralize($resource), null, $data);
 
         return $this->hydrator->hydrateSingle($data);
+    }
+
+    /**
+     * @param $object
+     *
+     * @return object
+     */
+    public function save($object)
+    {
+        $resource = $this->registry->getType(ClassUtils::getRealClass($object));
+
+        $method = 'POST';
+        $path = Inflector::pluralize($resource);
+        if ($this->unitOfWork->isInIdentityMap($object)) {
+            $method = 'PATCH';
+            $path .= '/'.$object->getId();
+        }
+
+        $data = [];
+
+        // FIXME: Quick way to serialize an object for persistence
+        $reflection = new \ReflectionClass(ClassUtils::getRealClass($object));
+        foreach ($reflection->getProperties() as $property) {
+            $property->setAccessible(true);
+            $value = $property->getValue($object);
+
+            if (!is_scalar($value)) {
+                continue;
+            }
+
+            $data[$property->getName()] = $property->getValue($object);
+        }
+
+        $data = $this->doRequest($method, $path, null, $data);
+
+        return $this->hydrator->hydrateSingle($data);
+    }
+
+    /**
+     * @param $path
+     *
+     * @return mixed
+     */
+    public function post($path)
+    {
+        return $this->doRequest('POST', $path);
     }
 
     /**

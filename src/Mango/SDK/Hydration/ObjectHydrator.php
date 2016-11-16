@@ -86,7 +86,10 @@ class ObjectHydrator implements HydratorInterface
         $className = $this->resourceRegistry->get($type);
 
         if (!$className) {
-            return false;
+            throw new \RuntimeException(sprintf(
+                'Trying to create object for type "%s", but it is not a registered resource.',
+                $type
+            ));
         }
 
         return $this->unitOfWork->createObject($className, $data);

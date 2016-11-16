@@ -32,11 +32,37 @@ class Shipment
     protected $method;
 
     /**
+     * @var Order
+     */
+    protected $order;
+
+    /**
+     * @var string
+     */
+    protected $tracking;
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function setOrder(Order $order)
+    {
+        $this->order = $order;
     }
 
     /**
@@ -71,8 +97,27 @@ class Shipment
         $this->method = $method;
     }
 
+    /**
+     * @return bool
+     */
     public function isBackorder()
     {
         return $this->state === 'backorder';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTracking()
+    {
+        return $this->tracking;
+    }
+
+    /**
+     * @param string $tracking
+     */
+    public function setTracking($tracking)
+    {
+        $this->tracking = $tracking;
     }
 }
