@@ -42,6 +42,11 @@ class Shipment
     protected $tracking;
 
     /**
+     * @var string
+     */
+    protected $labelUrl;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -119,5 +124,21 @@ class Shipment
     public function setTracking($tracking)
     {
         $this->tracking = $tracking;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabelUrl()
+    {
+        return $this->labelUrl;
+    }
+
+    /**
+     * @param string $labelUrl
+     */
+    public function setLabelUrl($labelUrl)
+    {
+        $this->labelUrl = $labelUrl;
     }
 }

@@ -18,10 +18,11 @@ class Hmac
 {
     /**
      * @param string $secret
+     * @param bool $checkInputStream
      *
      * @return bool
      */
-    public static function verify($secret)
+    public static function verify($secret, $checkInputStream = false)
     {
         if (!isset($_GET['hmac'])) {
             return false;
@@ -37,7 +38,7 @@ class Hmac
         $data = http_build_query($data);
 
         // for post requests we prepend the input stream
-        if ('POST' === $_SERVER['REQUEST_METHOD']) {
+        if ($checkInputStream) {
             $input = file_get_contents('php://input');
             $data = $input.$data;
         }
