@@ -77,12 +77,14 @@ class Client
     protected $requestCount = 0;
 
     /**
+     * @param string $baseUri
      * @param ResourceRegistry $registry
      * @param TokenStorageInterface $tokenStorage
      * @param $clientId
      * @param $clientSecret
      */
     public function __construct(
+        $baseUri,
         ResourceRegistry $registry,
         TokenStorageInterface $tokenStorage,
         $clientId,
@@ -93,7 +95,7 @@ class Client
         $this->hydrator = new ObjectHydrator($this->unitOfWork, $this->registry);
 
         $this->http = new \GuzzleHttp\Client([
-            'base_uri' => 'http://mango.docker/',
+            'base_uri' => $baseUri,
         ]);
 
         $this->tokenStorage = $tokenStorage;

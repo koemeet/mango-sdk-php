@@ -29,13 +29,14 @@ use Mango\SDK\Storage\TokenStorageInterface;
 class ClientBuilder
 {
     /**
+     * @param string $baseUri
      * @param TokenStorageInterface $tokenStorage
      * @param string $clientId
      * @param string $clientSecret
      *
      * @return Client
      */
-    public static function create(TokenStorageInterface $tokenStorage, $clientId, $clientSecret)
+    public static function create($baseUri, TokenStorageInterface $tokenStorage, $clientId, $clientSecret)
     {
         $registry = new ResourceRegistry();
         $registry->add('apps', App::class);
@@ -48,6 +49,6 @@ class ClientBuilder
         $registry->add('orders', Order::class);
         $registry->add('addresses', Address::class);
 
-        return new Client($registry, $tokenStorage, $clientId, $clientSecret);
+        return new Client($baseUri, $registry, $tokenStorage, $clientId, $clientSecret);
     }
 }
