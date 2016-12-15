@@ -70,7 +70,8 @@ class ObjectHydrator implements HydratorInterface
             $included = $data['included'];
 
             foreach ($included as $include) {
-                $this->getObject($include['type'], $include);
+                // silently try to include side loaded resources
+                $this->getObject($include['type'], $include, false);
             }
         }
     }
@@ -78,18 +79,23 @@ class ObjectHydrator implements HydratorInterface
     /**
      * @param $type
      * @param array $data
+     * @param bool $throw
      *
-     * @return object
+     * @return null|object
      */
-    private function getObject($type, array $data)
+    private function getObject($type, array $data, $throw = true)
     {
         $className = $this->resourceRegistry->get($type);
 
         if (!$className) {
-            throw new \RuntimeException(sprintf(
-                'Trying to create object for type "%s", but it is not a registered resource.',
-                $type
-            ));
+            if (true === $throw) {
+                throw new \RuntimeException(sprintf(
+                    'Trying to create object for type "%s", but it is not a registered resource.',
+                    $type
+                ));
+            }
+
+            return null;
         }
 
         return $this->unitOfWork->createObject($className, $data);

@@ -111,17 +111,21 @@ class Client
      */
     public function exchangeCodeForAccessToken($code, $redirectUri)
     {
+        $data = [
+            'grant_type' => 'authorization_code',
+            'code' => $code,
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'redirect_uri' => $redirectUri,
+        ];
+
         $response = $this->http->request('POST', '/oauth/v2/token', [
-            'json' => [
-                'grant_type' => 'authorization_code',
-                'code' => $code,
-                'client_id' => $this->clientId,
-                'client_secret' => $this->clientSecret,
-                'redirect_uri' => $redirectUri,
-            ],
+            'json' => $data,
         ]);
 
         $data = json_decode($response->getBody()->getContents(), true);
+
+        $this->tokenStorage->store($data['access_token'], $data['refresh_token']);
 
         return $data;
     }
